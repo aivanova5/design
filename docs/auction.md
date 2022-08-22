@@ -28,16 +28,19 @@ The auction bid `PUT` method allows the addition and modification of bid by devi
 ### Logic
 ```mermaid
 graph LR
-  style enter stroke-width:4px
-  enter([PUT]) --> valid{valid args?}
-  valid --No--> bad_request([400 bad request])
+  classDef start stroke-width:0px,fill:black,color:white
+  classDef success fill:green,stroke-width:0px,color:white
+  classDef error fill:red,stroke-width:0px,color:white
+  
+  enter([PUT]):::start --> valid{valid args?}
+  valid --No--> bad_request([400 bad request]):::error
   valid --Yes--> new{valid agent_id?}
   new --Yes--> allowed{valid device_id?}
   allowed --Yes--> insert_bid[[bid_id = auction.insert_bid:args]]
-  allowed --No-->forbidden([403 forbidden])
+  allowed --No-->forbidden([403 forbidden]):::error
   new --No--> exists{valid bid_id?}
   exists --Yes--> update_bid[[auction.update_bid:bid_id,args]]
-  exists --No--> not_found([404 not found])
-  update_bid --> OK([200 bid_id])
-  insert_bid --> Created([201 bid_id])
+  exists --No--> not_found([404 not found]):::error
+  update_bid --> OK([200 bid_id]):::success
+  insert_bid --> Created([201 bid_id]):::success
 ```
