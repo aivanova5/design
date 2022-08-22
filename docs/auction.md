@@ -1,7 +1,123 @@
+# Introduction
+
+The TESS auction is the default price-discovery mechanism for TESS and is required to provide the following capabilities.
+
+1. Periodically compute the price at which supply equals demand.
+1. Discover the price for one or more linearly independent quantities.
+
+# Definitions
+
+* **Agent**: The entity responsible for submitting Bids and executing Dispatch controls.
+* **Auction**: The collection of Bids received in a Market Interval.
+* **Bid**: The entry in the Auction made by an Agent on behalf of a Device.
+* **Clearing**: The result of processing all the Bids in the Auction
+* **Clearing Time**: The time at which the Clearing begins.
+* **Constraint Device**: The Device which imposes a supply constraint, if any, e.g., the feeder.
+* **Device**: The physical equipment associated with a Bid
+* **Dispatch**: The effect of a Device having a Price "in the money" of an Auction.
+* **Flexibility**: Determines whether a device can operated below the Bid Quantity when it is a Marginal Unit.
+* **Market Id**: The market identifier, i.e., the closing time modulo the Market Interval
+* **Market Interval**: The time interval over which the Auction Clearing is performed.
+* **Marginal Unit**: A Device that has a Dispatch Quantity less than its Bid Quantity. It is also the Device that sets the Price.
+* **Price**: The cost per unit of Quantity per hour at which a Device will Dispatch.
+* **Price Cap**: The highest price accepted by the Auction.
+* **Price Floor**: The lowest price accepted by the Auction.
+* **Quantity**:	The non-zero amount at which a Device will Dispatch.
+
+# Auction Rules
+
+## Bid Rules
+
+1. Only an Agent shall be permitted to submit or update a Bid
+   1. An Agent shall not be permitted to submit a Bid for a Device it cannot control.
+   1. The response to a valid Bid shall be an Bid Id.
+1. An Agent must specify the Constrained Device(s) under which the Device is operating.
+1. A Bid that includes an Bid Id shall update the Bid with the same Bid Id.
+   1. An updated Bid shall be ignored if it is received after the Market Clearing process is started.
+1. An Agent may withdraw a Bid any time before the Auction closes.
+1. A Bid Quantity must be non-zero
+   1. A Bid which has a negative Quantity shall be processed as a Supply Bid
+   1. A Bid which has a positive Quantity shall be processed as a Demand Bid
+   1. A Bid which has a zero or missing Quantity shall result in an error response. 
+1. A Bid shall include the Status (i.e., the current measured Quantity) of the device at the time the Bid is submitted.
+1. A Bid Price less than the Price Floor or greater than the Price Cap shall be rejected.
+   1. The price resolution for power quantities shall be 1.0x10-7 $/MWh, i.e., 1 minute minimum time, 1kW minimum quantity, and $0.01 minimum cost.
+   1. The price resolution for energy quantities shall be 1.0x10-9 $/MWh^2, i.e., 1 minute minimum time, 1kW.min minimum quantity, and $0.01 minimum cost.
+
+## Clearing Rules
+
+1. The utility's Agent shall submit a single Unresponsive Demand Bid for each Constrained Device with no price immediately prior to market clearing.
+   1. The Unresponsive Demand Bid shall be the total of current measured load for the Constrained Device less the total Quantity for all Devices under it.
+1. The Auction shall be closed when the Clearing Time is reached. 
+   1. The Clearing Time shall be when the Unix timestamp in seconds since midnight 1 January 1970 UTC modulo the Auction Clearing Interval in seconds is equal to zero.
+   1. Bids received after the Auction is closed shall be posted to the next Auction.
+1. The Clearing Price shall be the price at which the Supply Quantity exactly equals the Demand Quantity. 
+   1. The Clearing Price shall be between the Price Cap and the Price Floor, inclusive.
+   1. If the total unresponsive demand exceeds the total supply, the Clearing Price shall be the Price Cap.
+   1. If the Clearing Quantity is a range, then the Clearing Quantity shall be the maximum of the range.
+   1. If the Clearing Price is a range, then the Clearing Price shall be the midpoint of the range.
+
+## Dispatch Rules
+
+1. The Clearing Price shall be available less than 1 second after the Clearing Time.
+1. An Agent shall obtain the Clearing Price after the Clearing Time is reached.
+   1. If an Agent fails to obtain the Clearing Price, then each Device for which the Agent submitted Bids shall be deemed to have failed Dispatch if “in the money”.
+   1. A Demand Device shall be deemed dispatched if the Clearing Price is less than or equal to its Demand Bid Price and its Agent has obtained the Clearing Price.
+   1. A Supply Device shall be deemed dispatched if the Clearing Price is greater than or equal to its Supply Bid Price and its Agent has obtained the Clearing Price.
+   1. An Agent shall dispatch a Device immediately union receipt of the Clearing Price.
+
+## Settlement Rules
+
+1. Agents shall pay for all operations as metered by the device.
+   1. The metered cost shall be at the Clearing Price when dispatched.
+1. Devices shall Dispatch in accordance with its Agent's Bid.
+   1. A Device that fails to Dispatch in accordance its Agent's Bid shall pay a Penalty equal to the resulting lost surplus.
+      1. The Penalty shall be waived for the Marginal Unit.
+      1. The Penalty payment shall be distributed to the Dispatched devices in proportion to the surpluses received at the original Clearing Price, not counting the Device(s) paying the penalty.
+
+# Auction Data Tables
+
+## Bids
+
+| Name | Type | Description
+| ---- | ---- | -----------
+| bid_id | text | The bid identifier
+| market_id | integer | The market id sequence number
+| received_at | real | The timestamp at which the bid was recorded
+| device_id | text | The device identifier
+| constraint_id | text | The constraint identifier
+| quantity | real | The bid quantity (in units)
+| unit | text | The quantity units
+| price | real | The bid price (in $/h.units)
+| flexibility | integer | The device flexibility (0 for non, 1 for quantity)
+| state | real | The device's current state (in units)
+
+## Devices
+
+## Agents
+
+## Dispatch
+
+# Auction API
+
+## `GET /auction/<bid_id>`
+
+The auction bid `GET` method allows reading of bids by device agents.
+
+### Returns
+
+| Code | Body | Descsription 
+| ---- | ---- | ------------
+| 200  | `{"data" : {"bid_id" : "<bid_id>", "market_id" : <market_id>, "received_at" : <timestamp>, "device_id" : "<device_id>", "constraint_id" : <device_id>, "quantity" : <quantity>, "unit" : "<unit>", "price" : <price>, "state" : <quantity>, "flexibility" : <flexibility>}}` | The bid data was found ok
+| 403  | `{"error" : "<agent_id> not authorized for <device_id>"}` | The agent is not authorized to bid on behalf of the device
+| 404  | `{"error" : "<bid_id> invalid"}` | The bid was not found 
+
+### Logic
+
 ## `PUT /auction/<agent_id>`
 ## `PUT /auction/<bid_id>`
 
-The auction bid `PUT` method allows the addition and modification of bid by device agents.
+The auction bid `PUT` method allows the addition and modification of bids by device agents.
 
 ### Arguments
 
@@ -21,9 +137,9 @@ The auction bid `PUT` method allows the addition and modification of bid by devi
 | ---- | ---- | ------------
 | 200  | `{"data" : {"bid_id" : "<bid_id>"}}` | The bid update was successful
 | 201  | `{"data" : {"bid_id" : "<bid_id>"}}` | The bid insert was successful
-| 400  | `{"error" : "parameter <name> value <value> not valid"}` | A request parameter was not valid
-| 403  | `{"error" : "agent <agent_id> not valid for <device_id>"}` | The agent is not authorized to bid on behalf of the device
-| 404  | `{"error" : "bid <bid_id> is not valid"}` | The bid was not found or not current pending
+| 400  | `{"error" : "<name>=<value> invalid"}` | A request parameter was not valid
+| 403  | `{"error" : "<agent_id> not authorized for <device_id>"}` | The agent is not authorized to bid on behalf of the device
+| 404  | `{"error" : "<bid_id> invalid"}` | The bid was not found
 
 ### Logic
 ```mermaid
@@ -44,3 +160,17 @@ graph LR
   update_bid --> OK([200 bid_id]):::success
   insert_bid --> Created([201 bid_id]):::success
 ```
+
+## `DELETE /auction/<bid_id>`
+
+The auction bid `DELETE` method allows withdrawwal of bids by device agents.
+
+### Returns
+
+| Code | Body | Descsription 
+| ---- | ---- | ------------
+| 200  | None | The bid data was deleted ok
+| 403  | `{"error" : "<agent_id> not authorized for <device_id>"}` | The agent is not authorized to bid on behalf of the device
+| 404  | `{"error" : "<bid_id> invalid"}` | The bid was not found 
+| 409  | `{"error" : "<bid_id> is not pending"}` | The bid is not pending in the current market
+
