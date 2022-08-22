@@ -3,7 +3,7 @@
 The TESS auction is the default price-discovery mechanism for TESS and is required to provide the following capabilities.
 
 1. Periodically compute the price at which supply equals demand.
-1. Discover the price for one or more linearly independent quantities.
+1. Discover the price for one or more constrained quantities.
 
 # Definitions
 
@@ -97,6 +97,22 @@ The TESS auction is the default price-discovery mechanism for TESS and is requir
 ## Agents
 
 ## Dispatch
+
+# Data Validation
+
+## Bids
+
+1. The `bid_id` shall be a globally unique id string.
+2. The `market_id` shall be the Unix timestamp of the market closing time modulo the market clearing interval, rounded up.
+3. The `received_at` timestamp modulo the market clearing interval, rounded up, shall equal the `market_id`.
+4. The `constraint_id` device shall have the device type `CD` or be NULL if the `device_id` equal `CD`.
+5. The `device_id` shall be one of the configured device types, or `CD` if the `constraint_id` is NULL.
+6. The `quantity` shall be non-zero.
+7. The `quantity` shall be between the minimum and maximum quantities configured for the `device_id`.
+8. The `unit` shall be one of the configured units for the auction.
+9. The `price` shall be between the minimum and maximum prices configure for the auction.
+10. The flexibility shall be either `0` or `1`.
+11. The `state` shall be between the minimum and maximum quantities configured for the `device_id`.
 
 # Auction API
 
