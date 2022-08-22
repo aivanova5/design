@@ -114,6 +114,20 @@ The auction bid `GET` method allows reading of bids by device agents.
 
 ### Logic
 
+```mermaid
+graph LR
+  classDef start stroke-width:0px,fill:black,color:white
+  classDef success fill:green,stroke-width:0px,color:white
+  classDef error fill:red,stroke-width:0px,color:white
+  
+  enter([GET]):::start --> agent_ok{valid agent_id?}
+  agent_ok --No--> code403([403 Forbidden]):::error
+  agent_ok --Yes--> bid_ok{valid bid_id?}
+  bid_ok --No--> code404([404 Not Found]):::error
+  bid_ok --Yes--> get_data[[data = auction:get_bid:bid_id]]
+  get_data --> code200([200 OK]):::success
+```
+
 ## `PUT /auction/<agent_id>`
 ## `PUT /auction/<bid_id>`
 
@@ -142,6 +156,7 @@ The auction bid `PUT` method allows the addition and modification of bids by dev
 | 404  | `{"error" : "<bid_id> invalid"}` | The bid was not found
 
 ### Logic
+
 ```mermaid
 graph LR
   classDef start stroke-width:0px,fill:black,color:white
@@ -152,11 +167,11 @@ graph LR
   valid --No--> bad_request([400 bad request]):::error
   valid --Yes--> new{valid agent_id?}
   new --Yes--> allowed{valid device_id?}
-  allowed --Yes--> insert_bid[[bid_id = auction.insert_bid:args]]
   allowed --No-->forbidden([403 forbidden]):::error
+  allowed --Yes--> insert_bid[[bid_id = auction.insert_bid:args]]
   new --No--> exists{valid bid_id?}
-  exists --Yes--> update_bid[[auction.update_bid:bid_id,args]]
   exists --No--> not_found([404 not found]):::error
+  exists --Yes--> update_bid[[auction.update_bid:bid_id,args]]
   update_bid --> OK([200 bid_id]):::success
   insert_bid --> Created([201 bid_id]):::success
 ```
@@ -174,3 +189,20 @@ The auction bid `DELETE` method allows withdrawwal of bids by device agents.
 | 404  | `{"error" : "<bid_id> invalid"}` | The bid was not found 
 | 409  | `{"error" : "<bid_id> is not pending"}` | The bid is not pending in the current market
 
+### Logic
+
+```mermaid
+graph LR
+  classDef start stroke-width:0px,fill:black,color:white
+  classDef success fill:green,stroke-width:0px,color:white
+  classDef error fill:red,stroke-width:0px,color:white
+  
+  enter([GET]):::start --> agent_ok{valid agent_id?}
+  agent_ok --No--> code403([403 Forbidden]):::error
+  agent_ok --Yes--> bid_exists{valid bid_id?}
+  bid_exists --No--> code404([404 Not Found]):::error
+  bid_exists --Yes--> bid_pending{pending bid_id?}
+  bid_pending --No--> code409([409 Conflict]):::error
+  bid_pending --Yes--> get_data[[data = auction:delete_bid:bid_id]]
+  get_data --> code200([200 OK]):::success
+```
