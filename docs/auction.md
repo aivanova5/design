@@ -94,11 +94,19 @@ The TESS auction is the default price-discovery mechanism for TESS and is requir
 
 ## Devices
 
+TODO
+
 ## Agents
+
+TODO
 
 ## Dispatch
 
+TODO
+
 # Data Validation
+
+Data validation rules shall be enforced when data is being added the database or when the database is validated.
 
 ## Bids
 
@@ -113,6 +121,18 @@ The TESS auction is the default price-discovery mechanism for TESS and is requir
 9. The `price` shall be between the minimum and maximum prices configure for the auction.
 10. The flexibility shall be either `0` or `1`.
 11. The `state` shall be between the minimum and maximum quantities configured for the `device_id`.
+
+## Devices
+
+TODO
+
+## Agents
+
+TODO
+
+## Dispatch
+
+TODO
 
 # Auction API
 
