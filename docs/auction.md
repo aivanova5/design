@@ -19,11 +19,11 @@ The auction bid `PUT` method allows the addition and modification of bid by devi
 
 | Code | Body | Descsription 
 | ---- | ---- | ------------
-| 200  | `{"data" : {"bid_id" : <str>}}` | The bid update was successful
-| 201  | `{"data" : {"bid_id" : <str>}}` | The bid insert was successful
-| 400  | `{"error" : <str>}` | The bid request was not valid
-| 403  | `{"error" : <str>}` | The agent is not authorized to bid on behalf of the device
-| 404  | `{"error" : <str>}` | The bid was not found |
+| 200  | `{"data" : {"bid_id" : "<bid_id>"}}` | The bid update was successful
+| 201  | `{"data" : {"bid_id" : "<bid_id>"}}` | The bid insert was successful
+| 400  | `{"error" : "parameter <name> value <value> not valid"}` | A request parameter was not valid
+| 403  | `{"error" : "agent <agent_id> not valid for <device_id>"}` | The agent is not authorized to bid on behalf of the device
+| 404  | `{"error" : "bid <bid_id> is not valid"}` | The bid was not found or not current pending
 
 ### Logic
 ```mermaid
