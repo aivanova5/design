@@ -114,6 +114,7 @@ flowchart LR
 
 * Device Communications
   * [CTA-2045](https://shop.cta.tech/products/modular-communications-interface-for-energy-management)
+    * [SkyCentrics][https://skycentrics.com] 
   * OpenADR
     * [OpenADR Alliance](https://openadr.org/)
     * [Introduction to OpenADR 2.0](https://www.openadr.org/assets/docs/understanding%20openadr%202%200%20webinar_11_10_11_sm.pdf)
