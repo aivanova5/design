@@ -52,45 +52,47 @@ sequenceDiagram
    
    Note over Ledger,Device N: Settlement period opens
 
-   Note over Constraint,Device N: Auction opens
-   
-   par
-      Constraint->>+Auction: PUT /auction/bid
-      Auction-->>-Constraint: <bid_id>
-   and
-      Device 1->>+Auction: PUT /auction/bid
-      Auction-->>-Device 1: <bid_id>
-   and   
-      Device N->>+Auction: PUT /auction/bid
-      Auction-->>-Device N: <bid_id>
-   end
+   loop Auctions of settlement period
+      Note over Constraint,Device N: Auction opens
 
-   Note over Constraint,Device N: Auction closes
-   Note over Constraint,Device N: Dispatch begins
-   
-   Constraint->>+Auction: GET /dispatch/<bid_id>
-   Note over Auction: Market clears on first GET
-   Auction-->>-Constraint: <price>, <quantity>
-   
-   par
-      Device 1->>+Auction: GET /dispatch/<bid_id>
-      Auction-->>-Device 1: <price>, <quantity>
-   and
-      Device N->>+Auction: GET /dispatch/<bid_id>
-      Auction-->>-Device N: <price>, <quantity>
-   end
-   
-   Note over Constraint,Device N: Dispatch ends
-   
-   par
-      Constraint->>+Ledger: PUT /settle/<bid_id>
-      Ledger-->>-Constraint: <cost>
-   and
-      Device 1->>+Ledger: PUT /settle/<bid_id>
-      Ledger-->>-Device: <cost>
-   and
-      Device N->>+Ledger: PUT /settle/<bid_id>
-      Ledger-->>-Device 1: <cost>
+      par
+         Constraint->>+Auction: PUT /auction/bid
+         Auction-->>-Constraint: <bid_id>
+      and
+         Device 1->>+Auction: PUT /auction/bid
+         Auction-->>-Device 1: <bid_id>
+      and   
+         Device N->>+Auction: PUT /auction/bid
+         Auction-->>-Device N: <bid_id>
+      end
+
+      Note over Constraint,Device N: Auction closes
+      Note over Constraint,Device N: Dispatch begins
+
+      Constraint->>+Auction: GET /dispatch/<bid_id>
+      Note over Auction: Market clears on first GET
+      Auction-->>-Constraint: <price>, <quantity>
+
+      par
+         Device 1->>+Auction: GET /dispatch/<bid_id>
+         Auction-->>-Device 1: <price>, <quantity>
+      and
+         Device N->>+Auction: GET /dispatch/<bid_id>
+         Auction-->>-Device N: <price>, <quantity>
+      end
+
+      Note over Constraint,Device N: Dispatch ends
+
+      par
+         Constraint->>+Ledger: PUT /settle/<bid_id>
+         Ledger-->>-Constraint: <cost>
+      and
+         Device 1->>+Ledger: PUT /settle/<bid_id>
+         Ledger-->>-Device 1: <cost>
+      and
+         Device N->>+Ledger: PUT /settle/<bid_id>
+         Ledger-->>-Device N: <cost>
+      end
    end
    
    Note over Ledger,Device N: Settlement period closes
