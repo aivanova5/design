@@ -7,19 +7,19 @@ flowchart TD
   agents[Agents] -- REST --> gateway[API Gateway]
 
   billing([Billing User]) --> billing_app[Billing App]:::active -- REST --> gateway
-      click billing_app "https://github.com/tess-v2/design/blob/master/docs/billing.md" _blank
+      click billing_app "https://github.com/tess-v2/design/blob/main/docs/billing.md" _blank
 
   users([Users]) --> user_app[User App]:::active -- REST --> gateway
-      click user_app "https://github.com/tess-v2/design/blob/master/docs/users.md" _blank
+      click user_app "https://github.com/tess-v2/design/blob/main/docs/users.md" _blank
 
   controllers([Controllers]) --> controller_app[Controller App]:::active -- REST --> gateway
-      click controller_app "https://github.com/tess-v2/design/blob/master/docs/controllers.md" _blank
+      click controller_app "https://github.com/tess-v2/design/blob/main/docs/controllers.md" _blank
 
   monitors([Monitors]) --> monitor_app[Monitor App]:::active -- REST --> gateway
-      click monitor_app "https://github.com/tess-v2/design/blob/master/docs/monitors.md" _blank
+      click monitor_app "https://github.com/tess-v2/design/blob/main/docs/monitors.md" _blank
 
   experiment([Experimenters]) --> experiment_app[Experiment App]:::active -- REST --> gateway
-      click experiment_app "https://github.com/tess-v2/design/blob/master/docs/experimenters.md" _blank
+      click experiment_app "https://github.com/tess-v2/design/blob/main/docs/experimenters.md" _blank
 
   gateway --> auth[Cognito]
   
@@ -38,12 +38,12 @@ flowchart TD
     lambda --> sqs((SQS))
     lambda --> sns((SNS))
     lambda ---> auction[Auction]:::active
-      click auction "https://github.com/tess-v2/design/blob/master/docs/auction.md" _blank
+      click auction "https://github.com/tess-v2/design/blob/main/docs/auction.md" _blank
       auction ---> database[(Database)]    
     lambda ---> device[Device]:::active
-      click device "https://github.com/tess-v2/design/blob/master/docs/device.md" _blank
+      click device "https://github.com/tess-v2/design/blob/main/docs/device.md" _blank
       device ---> database[(Database)]:::active
-      click database "https://github.com/tess-v2/design/blob/master/docs/database.md" _blank
+      click database "https://github.com/tess-v2/design/blob/main/docs/database.md" _blank
       
   gateway --> amplify[Amplify]
   
