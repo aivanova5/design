@@ -317,3 +317,33 @@ graph LR
   bid_pending --Yes--> get_data[[data = auction:delete_bid:bid_id]]
   get_data --> code200([200 OK]):::success
 ```
+# Dispatch API
+
+## `GET /dispatch/<bid_id>`
+
+The dispatch bid `GET` method allows reading of dispatch by device agents.
+
+### Returns
+
+| Code | Body | Descsription 
+| ---- | ---- | ------------
+| 200  | `{"data" : {"device_id" : "<device_id>", "quantity" : <quantity>, "unit" : "<unit>", "price" : <price>, "duration" : <duration>}}` | The dispatch data was found ok
+| 403  | `{"error" : "<agent_id> not authorized for <device_id>"}` | The agent is not authorized to bid on behalf of the device
+| 404  | `{"error" : "<bid_id> invalid"}` | The bid was not found 
+
+### Logic
+
+```mermaid
+graph LR
+  classDef start stroke-width:0px,fill:black,color:white
+  classDef success fill:green,stroke-width:0px,color:white
+  classDef error fill:red,stroke-width:0px,color:white
+  
+  enter([GET]):::start --> agent_ok{valid agent_id?}
+  agent_ok --No--> code403([403 Forbidden]):::error
+  agent_ok --Yes--> bid_ok{valid bid_id?}
+  bid_ok --No--> code404([404 Not Found]):::error
+  bid_ok --Yes--> get_data[[data = auction:get_bid:bid_id]]
+  get_data --> code200([200 OK]):::success
+```
+
