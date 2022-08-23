@@ -13,7 +13,7 @@ gantt
    axisFormat %H:00
    title Daily market sequence with noon hour active
 section Day 
-   Settlement 1-12 (settled): done, des0, 00:00, 12:00
+   Settlement 1-12 (closed): done, des0, 00:00, 12:00
    Settlement 13: crit, des13, 12:00, 13:00
    Auction 1 (closed): done, des1, 12:00, 12:15
    Auction 2 (dispatched): crit, des2, after des1, 12:30
@@ -37,6 +37,8 @@ sequenceDiagram
    
    autonumber
    
+   Note over Ledger,Device N: Settlement period opens
+
    Note over Constraint,Device N: Auction opens
    
    par
@@ -69,7 +71,7 @@ sequenceDiagram
    
    par
       Constraint->>+Ledger: PUT /settle/<bid_id>
-      Ledge-->>-Constraint: <cost>
+      Ledger-->>-Constraint: <cost>
    and
       Device 1->>+Ledger: PUT /settle/<bid_id>
       Ledger-->>-Device: <cost>
@@ -78,7 +80,7 @@ sequenceDiagram
       Ledger-->>-Device 1: <cost>
    end
    
-   Note over Ledger,Device N: Settlement ends
+   Note over Ledger,Device N: Settlement period closes
 ```
 
 The devices submit bids after the market opens. When the market closes, devices request their dispatch. The first request received results in a market clearing operation to discover the price. All dispatch requests return the clearing price and the dispatch quantity for the device. Note that the marginal device will receive a quantity less than its bid. Dispatched units will receive a quantity equal to their bids. Devices that are not dispatched will receive a quantity zero.  If more than one device bid the clearing price, then the marginal unit is chosen based on the order in which the bids are received with earlier bids receiving high precedence in the dispatch order.
@@ -188,6 +190,14 @@ The devices submit bids after the market opens. When the market closes, devices 
 | price | real | The price at which the quantity is dispatched
 | duration | real | The duration of the dispatch in seconds
 
+## Ledger
+
+| Name | Type | Description
+| ---- | ---- | -----------
+| bid_id | text | The bid for this dispatch
+| meter | real | The cumulative quantity dispatched
+| unit | text | The unit of the cumulative quantity
+| cost | real | The payment for this settled bid
 
 # Data Validation
 
@@ -222,6 +232,12 @@ Data validation rules shall be enforced when data is being added the database or
 4. If the quantity is non-zero, then price shall be less than or equal to the bid price if the bid quantity is positive, or greather than or equal to the bid price if the bid quantity is negative.
 5. If the quantity is zero, then price shall be less than or equal to the bid price if the bid quantity is negative, or greather than or equal to the bid price if the bid quantity is positive.
 6. The duration shall be equal to market interval configured for the unit.
+
+## Ledger
+
+1. The `bid_id` shall exist in the bids table.
+2. The `unit` shall be the bid unit divided by 1 hour.
+3. The `cost` shall equal the `meter` value multiplied by the dispatch price.
 
 # Auction API
 
@@ -331,6 +347,7 @@ graph LR
   bid_pending --Yes--> get_data[[data = auction:delete_bid:bid_id]]
   get_data --> code200([200 OK]):::success
 ```
+
 # Dispatch API
 
 ## `GET /dispatch/<bid_id>`
@@ -359,5 +376,47 @@ graph LR
   bid_ok --No--> code404([404 Not Found]):::error
   bid_ok --Yes--> get_data[[data = auction:get_dispatch:bid_id]]
   get_data --> code200([200 OK]):::success
+```
+
+# Settle API
+
+## `PUT /settle/<bid_id>`
+
+The dispatch bid `PUT` method allows submitted of metering by device agents.
+
+### Arguments
+
+| Name | Type | Description
+| ---- | ---- | -----------
+| bid_id | text | The bid for this dispatch
+| meter | real | The cumulative quantity dispatched
+| unit | text | The unit of the cumulative quantity
+| cost | real | The payment for this settled bid
+
+### Returns
+
+| Code | Body | Descsription 
+| ---- | ---- | ------------
+| 201  | `{"data" : {"bid_id" : "<bid_id>"}}` | The ledger insert was successful
+| 400  | `{"error" : "<name>=<value> invalid"}` | A request parameter was not valid
+| 403  | `{"error" : "<agent_id> not authorized for <device_id>"}` | The agent is not authorized to bid on behalf of the device
+| 404  | `{"error" : "<bid_id> invalid"}` | The bid was not found
+
+### Logic
+
+```mermaid
+graph LR
+  classDef start stroke-width:0px,fill:black,color:white
+  classDef success fill:green,stroke-width:0px,color:white
+  classDef error fill:red,stroke-width:0px,color:white
+  
+  enter([PUT]):::start --> agent_ok{valid agent_id?}
+  agent_ok --No--> code403([403 Forbidden]):::error
+  agent_ok --Yes--> valid{valid args?}
+  valid --No--> code400([400 Bad Request]):::error
+  valid --Yes--> bid_ok{valid bid_id?}
+  bid_ok --No--> code404([404 Not Found]):::error
+  bid_ok --Yes--> get_data[[data = auction:insert_ledger:bid_id]]
+  get_data --> code201([201 Created]):::success
 ```
 
