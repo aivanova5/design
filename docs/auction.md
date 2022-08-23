@@ -156,17 +156,24 @@ The devices submit bids after the market opens. When the market closes, devices 
 | flexibility | integer | The device flexibility (0 for non, 1 for quantity)
 | state | real | The device's current state (in units)
 
-## Devices
-
-TODO
-
 ## Agents
 
-TODO
+| Name | Type | Description
+| ---- | ---- | -----------
+| agent_id | text | The agent identifier
+| user_id  | text | The user who owns the agent
+| valid_at | real | The timeat which this record goes into effect
 
 ## Dispatch
 
-TODO
+| Name | Type | Description
+| ---- | ---- | -----------
+| bid_id | text | The bid for this dispatch
+| quantity | real | The quantity dispatched
+| unit | text | The unit of quantity dispatched
+| price | real | The price at which the quantity is dispatched
+| duration | real | The duration of the dispatch in seconds
+
 
 # Data Validation
 
@@ -186,17 +193,21 @@ Data validation rules shall be enforced when data is being added the database or
 10. The flexibility shall be either `0` or `1`.
 11. The `state` shall be between the minimum and maximum quantities configured for the `device_id`.
 
-## Devices
-
-TODO
-
 ## Agents
 
-TODO
+1. The `agent_id` shall be globally unique
+2. The `user_id` shall be exist in the user table
+3. The `valid_at` value shall be unique for this agent
+4. The `valid_at` value shall be less than or equal to the current timestamp.
 
 ## Dispatch
 
-TODO
+1. The `bid_id` shall exist in the bids table.
+2. The `quantity` shall be between 0 and the quantity of the bid in the bids table, inclusive.
+3. The unit shall be the same as in the bids table.
+4. If the quantity is non-zero, then price shall be less than or equal to the bid price if the bid quantity is positive, or greather than or equal to the bid price if the bid quantity is negative.
+5. If the quantity is zero, then price shall be less than or equal to the bid price if the bid quantity is negative, or greather than or equal to the bid price if the bid quantity is positive.
+6. The duration shall be equal to market interval configured for the unit.
 
 # Auction API
 
