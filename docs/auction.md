@@ -271,6 +271,8 @@ Data validation rules shall be enforced when data is being added the database or
 
 The auction subsystem implements the following API.
 
+All agents must authenticate using an API token. This token is used to both verify the identity of the agent and the validity of the request made.  For example, when an agent uses GET to obtain data about a device, the agent must use a valid token to verify its identity. The agent id is then used to verify that the agent is authorized to control the device in the request.
+
 ## `GET /auction/<bid_id>`
 
 The auction bid `GET` method allows reading of bids by device agents.
@@ -295,12 +297,12 @@ graph LR
   agent_ok --No--> code403([403 Forbidden]):::error
   agent_ok --Yes--> bid_ok{valid bid_id?}
   bid_ok --No--> code404([404 Not Found]):::error
-  bid_ok --Yes--> get_data[[data = auction:get_bid:bid_id]]
+  bid_ok --Yes--> get_data[[data = database.bid.get:bid_id]]
   get_data --> code200([200 OK]):::success
 ```
 
-## `PUT /auction/<device_id>`
-## `PUT /auction/<bid_id>`
+## `PUT /auction/<device_id>?<args>`
+## `PUT /auction/<bid_id>?<args>`
 
 The auction bid `PUT` method allows the addition and modification of bids by device agents.
 
@@ -339,10 +341,10 @@ graph LR
   valid --Yes--> new{valid agent_id?}
   new --Yes--> allowed{valid device_id?}
   allowed --No-->forbidden([403 forbidden]):::error
-  allowed --Yes--> insert_bid[[bid_id = auction.insert_bid:args]]
+  allowed --Yes--> insert_bid[[bid_id = database.bid.insert:device_id,args]]
   new --No--> exists{valid bid_id?}
   exists --No--> not_found([404 not found]):::error
-  exists --Yes--> update_bid[[auction.update_bid:bid_id,args]]
+  exists --Yes--> update_bid[[database.bid.update:bid_id,args]]
   update_bid --> OK([200 bid_id]):::success
   insert_bid --> Created([201 bid_id]):::success
 ```
@@ -374,7 +376,7 @@ graph LR
   bid_exists --No--> code404([404 Not Found]):::error
   bid_exists --Yes--> bid_pending{pending bid_id?}
   bid_pending --No--> code409([409 Conflict]):::error
-  bid_pending --Yes--> get_data[[data = auction:delete_bid:bid_id]]
+  bid_pending --Yes--> get_data[[data = database.bid.delete:bid_id]]
   get_data --> code200([200 OK]):::success
 ```
 
@@ -404,13 +406,13 @@ graph LR
   agent_ok --No--> code403([403 Forbidden]):::error
   agent_ok --Yes--> bid_ok{valid bid_id?}
   bid_ok --No--> code404([404 Not Found]):::error
-  bid_ok --Yes--> get_data[[data = auction:get_dispatch:bid_id]]
+  bid_ok --Yes--> get_data[[data = database.dispatch.get:bid_id]]
   get_data --> code200([200 OK]):::success
 ```
 
 # Settle API
 
-## `PUT /settle/<bid_id>`
+## `PUT /settle/<bid_id>?<args>`
 
 The dispatch bid `PUT` method allows submitted of metering by device agents.
 
@@ -446,7 +448,7 @@ graph LR
   valid --No--> code400([400 Bad Request]):::error
   valid --Yes--> bid_ok{valid bid_id?}
   bid_ok --No--> code404([404 Not Found]):::error
-  bid_ok --Yes--> get_data[[data = auction:insert_ledger:bid_id,args]]
+  bid_ok --Yes--> get_data[[data = database.ledger.insert:bid_id,args]]
   get_data --> code201([201 Created]):::success
 ```
 
