@@ -113,7 +113,7 @@ flowchart LR
 # Reference Documents
 
 * Device Communications
-  * [CTA-2045]([https://standards.cta.tech/apps/group_public/project/details.php?project_id=192](https://shop.cta.tech/products/modular-communications-interface-for-energy-management))
+  * [CTA-2045](https://shop.cta.tech/products/modular-communications-interface-for-energy-management)
   * OpenADR
     * [OpenADR Alliance](https://openadr.org/)
     * [Introduction to OpenADR 2.0](https://www.openadr.org/assets/docs/understanding%20openadr%202%200%20webinar_11_10_11_sm.pdf)
