@@ -138,8 +138,8 @@ In order for a database operation to be successfully completed, the following ru
    1. A Bid which has a zero or missing Quantity shall result in an error response. 
 1. A Bid shall include the Status (i.e., the current measured Quantity) of the device at the time the Bid is submitted.
 1. A Bid Price less than the Price Floor or greater than the Price Cap shall be rejected.
-   1. The price resolution for power quantities shall be 1.0x10-7 $/MWh, i.e., 1 minute minimum time, 1kW minimum quantity, and $0.01 minimum cost.
-   1. The price resolution for energy quantities shall be 1.0x10-9 $/MWh^2, i.e., 1 minute minimum time, 1kW.min minimum quantity, and $0.01 minimum cost.
+   1. The price resolution for power quantities shall be 1.0x10-4 $/MWh, i.e., 1 hour maximum time, 100MW maximum quantity, and $0.01 minimum cost.
+   1. The price resolution for energy quantities shall be 1.0x10-8 $/MWh^2, i.e., 100 hours maximum time, 10GWh maximum quantity, and $0.01 minimum cost.
 
 ## Clearing Rules
 
