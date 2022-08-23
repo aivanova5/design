@@ -416,7 +416,7 @@ graph LR
   valid --No--> code400([400 Bad Request]):::error
   valid --Yes--> bid_ok{valid bid_id?}
   bid_ok --No--> code404([404 Not Found]):::error
-  bid_ok --Yes--> get_data[[data = auction:insert_ledger:bid_id]]
+  bid_ok --Yes--> get_data[[data = auction:insert_ledger:bid_id,args]]
   get_data --> code201([201 Created]):::success
 ```
 
