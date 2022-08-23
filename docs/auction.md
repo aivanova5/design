@@ -5,7 +5,7 @@ The TESS auction is the default price-discovery mechanism for TESS and is requir
 1. Periodically compute the price at which supply equals demand.
 1. Discover the price for one or more constrained quantities.
 
-Auction are a series of bid/clear events that create a market for devices to trade varying quantities of some unit.
+Auctions are a sequence of bid/clear/dispatch/settle events that create a market for devices to trade varying quantities of some unit.
 
 ```mermaid
 gantt
@@ -22,7 +22,9 @@ section Day
    Settlement 14-24 (pending):   des14, 13:00, 24:00
 ```
 
-The sequence of events for an auction is illustrated by the following
+Each auction opens after the previous auction closes and last for the configured market interval (typically 5 minutes). After the configured settlement interval, the closed markets are settled and the payments are recorded for later billing.
+
+The sequence of events for an individual auction is illustrated by the following
 
 ```mermaid
 sequenceDiagram
@@ -64,6 +66,8 @@ sequenceDiagram
    
    Note over Constraint,Device N: Dispatch ends
 ```
+
+The devices submit bids after the market opens. When the market closes, devices request their dispatch. The first request received results in a market clearing operation to discover the price. All dispatch requests return the clearing price and the dispatch quantity for the device. Note that the marginal device will receive a quantity less than its bid. Dispatched units will receive a quantity equal to their bids. Devices that are not dispatched will receive a quantity zero.  If more than one device bid the clearing price, then the marginal unit is chosen based on the order in which the bids are received with earlier bids receiving high precedence in the dispatch order.
 
 # Definitions
 
