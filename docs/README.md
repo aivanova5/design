@@ -5,7 +5,8 @@ flowchart TD
   classDef active stroke-width:4px;
 
   devices([Devices]) --OpenADR--> agents  
-  agents[Agents] --REST--> gateway[API Gateway]
+  agents[Agents]:::active --REST--> gateway[API Gateway]
+      click agents "https://github.com/tess-v2/design/blob/main/docs/agents.md" _blank
 
   users([Users]) --HTTPS--> user_app[User App]:::active --REST--> gateway
       click user_app "https://github.com/tess-v2/design/blob/main/docs/users.md" _blank
@@ -25,7 +26,8 @@ flowchart TD
   gateway --> auth[Cognito]
   
   gateway --> s3[S3]
-    s3 --> www([Websites])
+    s3 --> websites([Websites]):::active
+      click websites "https://github.com/tess-v2/design/blob/main/docs/websites.md" _blank
   
   gateway --> ec2[EC2]
     ec2 --> elb((ELB))
@@ -57,16 +59,24 @@ flowchart TD
 ```mermaid
 flowchart LR
 
-  agent[Agent] --"REST"--> auction[Auction] 
+  classDef active stroke-width:4px;
+
+  agent[Agent]:::active --"REST"--> auction[Auction]:::active
+    click agent "https://github.co/tess-v2/design/blob/main/docs/agent.md" _blank
+    click auction "https://github.com/tess-v2/design/blob/main/docs/auction.md" _blank
+    
+  agent --"OpenADR"--> device[Device]:::active
+  agent --"CTA2045"--> device
+    click device "https://github.com/tess-v2/design/blob/main/docs/device.md" _blank
   
-  agent --"OpenADR"--> device[Device]
   user --Device Interface--> device
   
-  auction --"SQL"--> database[(Database)]
-      click database "https://github.com/tess-v2/design/blob/main/docs/database.md" _blank
+  auction --"SQL"--> database[(Database)]:::active
+    click database "https://github.com/tess-v2/design/blob/main/docs/database.md" _blank
   
-  user([User]) --HTTPS--> user_app[User App] --REST--> database_api[db_api]:::active --SQL--> database
-      click user_app "https://github.com/tess-v2/design/blob/main/docs/users.md" _blank
+  user([User]) --HTTPS--> user_app[User App]:::active --REST--> database_api[db_api]:::active --SQL--> database
+    click user_app "https://github.com/tess-v2/design/blob/main/docs/users.md" _blank
+    click db_api "https://github.co/tess-v2/design/blob/main/docs/database.md" _blank
 
   controller([Controller]) --HTTPS--> controller_app[Controller App]:::active --REST--> database_api
       click controller_app "https://github.com/tess-v2/design/blob/main/docs/controller.md" _blank
@@ -92,10 +102,12 @@ flowchart LR
 * [Experimenters](experimenters.md)
 
 ## APIs
+* [Agents](agents.md)
 * [Auction](auction.md)
+* [Database](database.md)
 * [Device](device.md)
 
-## Data storage
+## Data systems
 * [Database](database.md)
 
 # Reference Documents
