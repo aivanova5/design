@@ -343,7 +343,7 @@ graph LR
   agent_ok --No--> code403([403 Forbidden]):::error
   agent_ok --Yes--> bid_ok{valid bid_id?}
   bid_ok --No--> code404([404 Not Found]):::error
-  bid_ok --Yes--> get_data[[data = auction:get_bid:bid_id]]
+  bid_ok --Yes--> get_data[[data = auction:get_dispatch:bid_id]]
   get_data --> code200([200 OK]):::success
 ```
 
