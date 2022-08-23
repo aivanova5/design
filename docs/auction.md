@@ -12,14 +12,27 @@ gantt
    dateFormat HH:mm
    axisFormat %H:00
    title Daily market sequence with noon hour active
-section Day 
-   Settlement 1-12 (closed): done, des0, 00:00, 12:00
-   Settlement 13: crit, des13, 12:00, 13:00
-   Auction 1 (closed): done, des1, 12:00, 12:15
-   Auction 2 (dispatched): crit, des2, after des1, 12:30
-   Auction 3 (active): active, des3, after des2, 12:45
-   Auction 4 (pending):   des4, after des3, 13:00
-   Settlement 14-24 (pending):   des14, 13:00, 24:00
+
+section Day N-...
+   Settlement 1-24 (closed): done, da00, 00:00, 24:00
+
+section Day N-1
+   Settlement 1-24 (closed): done, day1, 00:00, 24:00
+   
+section Day N
+   Settlement 1-12 (closed): done, hr0, 00:00, 12:00
+   Settlement 13 (active): crit, hr13, 12:00, 13:00
+   Auction 1 (closed): done, auc1, 12:00, 12:15
+   Auction 2 (dispatched): crit, auc2, after auc1, 12:30
+   Auction 3 (active): active, auc3, after auc2, 12:45
+   Auction 4 (pending):   auc4, after auc3, 13:00
+   Settlement 14-24 (pending):   hr14, 13:00, 24:00
+
+section Day N+1
+   Settlement 1-24 (pending): fut0, 00:00, 24:00
+
+section Day N+...
+   Settlement 1-24 (pending): fut1, 00:00, 24:00
 ```
 
 Each auction opens after the previous auction closes and last for the configured market interval (typically 5 minutes). After the configured settlement interval, the closed markets are settled and the payments are recorded for later billing.
