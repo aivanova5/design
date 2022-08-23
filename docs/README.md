@@ -1,24 +1,25 @@
+# System Architecture
 ```mermaid
 flowchart TD
   
   classDef active stroke-width:4px;
 
-  devices([Devices]) -- OpenADR --> agents  
-  agents[Agents] -- REST --> gateway[API Gateway]
+  devices([Devices]) --OpenADR--> agents  
+  agents[Agents] --REST--> gateway[API Gateway]
 
-  billing([Billing User]) --> billing_app[Billing App]:::active -- REST --> gateway
-      click billing_app "https://github.com/tess-v2/design/blob/main/docs/billing.md" _blank
-
-  users([Users]) --> user_app[User App]:::active -- REST --> gateway
+  users([Users]) --HTTPS--> user_app[User App]:::active --REST--> gateway
       click user_app "https://github.com/tess-v2/design/blob/main/docs/users.md" _blank
 
-  controllers([Controllers]) --> controller_app[Controller App]:::active -- REST --> gateway
+  controllers([Controllers]) --HTTPS--> controller_app[Controller App]:::active --REST--> gateway
       click controller_app "https://github.com/tess-v2/design/blob/main/docs/controllers.md" _blank
 
-  monitors([Monitors]) --> monitor_app[Monitor App]:::active -- REST --> gateway
+  billing([Billing User]) --HTTPS--> billing_app[Billing App]:::active --REST--> gateway
+      click billing_app "https://github.com/tess-v2/design/blob/main/docs/billing.md" _blank
+
+  monitors([Monitors]) --HTTPS--> monitor_app[Monitor App]:::active --REST--> gateway
       click monitor_app "https://github.com/tess-v2/design/blob/main/docs/monitors.md" _blank
 
-  experiment([Experimenters]) --> experiment_app[Experiment App]:::active -- REST --> gateway
+  experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> gateway
       click experiment_app "https://github.com/tess-v2/design/blob/main/docs/experimenters.md" _blank
 
   gateway --> auth[Cognito]
@@ -37,18 +38,48 @@ flowchart TD
   gateway --> lambda[Lambda]
     lambda --> sqs((SQS))
     lambda --> sns((SNS))
-    lambda ---> auction[Auction]:::active
+    lambda --> auction[Auction]:::active
       click auction "https://github.com/tess-v2/design/blob/main/docs/auction.md" _blank
-      auction ---> database[(Database)]    
-    lambda ---> device[Device]:::active
+      auction --API--> database  
+    lambda --> device[Device]:::active
       click device "https://github.com/tess-v2/design/blob/main/docs/device.md" _blank
-      device ---> database[(Database)]:::active
+      device --API--> database[(Database)]:::active
       click database "https://github.com/tess-v2/design/blob/main/docs/database.md" _blank
       
   gateway --> amplify[Amplify]
   
   gateway --> other[Other services]
   
+```
+
+# Information Flow
+
+```mermaid
+flowchart LR
+
+  agent[Agent] --"REST"--> auction[Auction] 
+  
+  agent --"OpenADR"--> device[Device]
+  user --Device Interface--> device
+  
+  auction --"SQL"--> database[(Database)]
+      click database "https://github.com/tess-v2/design/blob/main/docs/database.md" _blank
+  
+  user([User]) --HTTPS--> user_app[User App] --REST--> database_api[db_api]:::active --SQL--> database
+      click user_app "https://github.com/tess-v2/design/blob/main/docs/users.md" _blank
+
+  controller([Controller]) --HTTPS--> controller_app[Controller App]:::active --REST--> database_api
+      click controller_app "https://github.com/tess-v2/design/blob/main/docs/controller.md" _blank
+
+  billing([Billing User]) --HTTPS--> billing_app[Billing App]:::active --REST--> database_api
+      click billing_app "https://github.com/tess-v2/design/blob/main/docs/billing.md" _blank
+
+  monitors([Monitors]) --HTTPS--> monitor_app[Monitor App]:::active --REST--> database_api
+      click monitor_app "https://github.com/tess-v2/design/blob/main/docs/monitors.md" _blank
+
+  experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> database_api
+      click experiment_app "https://github.com/tess-v2/design/blob/main/docs/experimenters.md" _blank
+
 ```
 
 # Component Design 
@@ -67,3 +98,9 @@ flowchart TD
 ## Data storage
 * [Database](database.md)
 
+# Reference Documents
+
+* OpenADR
+  * [OpenADR Alliance](https://openadr.org/)
+  * [Introduction to OpenADR 2.0](https://www.openadr.org/assets/docs/understanding%20openadr%202%200%20webinar_11_10_11_sm.pdf)
+  * [OpenADR 2.0b Specification](https://cimug.ucaiug.org/Projects/CIM-OpenADR/Shared%20Documents/Source%20Documents/OpenADR%20Alliance/OpenADR_2_0b_Profile_Specification_v1.0.pdf)]
