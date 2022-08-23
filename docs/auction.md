@@ -5,6 +5,66 @@ The TESS auction is the default price-discovery mechanism for TESS and is requir
 1. Periodically compute the price at which supply equals demand.
 1. Discover the price for one or more constrained quantities.
 
+Auction are a series of bid/clear events that create a market for devices to trade varying quantities of some unit.
+
+```mermaid
+gantt
+   dateFormat HH:mm
+   axisFormat %H:00
+   title Daily market sequence with noon hour active
+section Day 
+   Settlement 1-12 (settled): done, des0, 00:00, 12:00
+   Settlement 13: crit, des13, 12:00, 13:00
+   Auction 1 (closed): done, des1, 12:00, 12:15
+   Auction 2 (dispatched): crit, des2, after des1, 12:30
+   Auction 3 (active): active, des3, after des2, 12:45
+   Auction 4 (pending):   des4, after des3, 13:00
+   Settlement 14-24 (pending):   des14, 13:00, 24:00
+```
+
+The sequence of events for an auction is illustrated by the following
+
+```mermaid
+sequenceDiagram
+   participant Constraint
+   participant Auction
+   participant Device 1
+   participant ...
+   participant Device N
+   
+   autonumber
+   
+   Note over Constraint,Device N: Auction opens
+   
+   par
+      Constraint->>+Auction: PUT /auction/bid
+      Auction-->>-Constraint: <bid_id>
+   and
+      Device 1->>+Auction: PUT /auction/bid
+      Auction-->>-Device 1: <bid_id>
+   and   
+      Device N->>+Auction: PUT /auction/bid
+      Auction-->>-Device N: <bid_id>
+   end
+
+   Note over Constraint,Device N: Auction closes
+   Note over Constraint,Device N: Dispatch begins
+   
+   Constraint->>+Auction: GET /auction/<bid_id>
+   Note over Auction: Market clears on first GET
+   Auction-->>-Constraint: <price>, <quantity>
+   
+   par
+      Device 1->>+Auction: GET /auction/<bid_id>
+      Auction-->>-Device 1: <price>, <quantity>
+   and
+      Device N->>+Auction: GET /auction/<bid_id>
+      Auction-->>-Device N: <price>, <quantity>
+   end
+   
+   Note over Constraint,Device N: Dispatch ends
+```
+
 # Definitions
 
 * **Agent**: The entity responsible for submitting Bids and executing Dispatch controls.
