@@ -62,8 +62,8 @@ flowchart TD
 
 ## APIs
 * [Auction](auction.md)
-* [Database](database.md)
+* [Device](device.md)
 
 ## Data storage
-* [Device](device.md)
+* [Database](database.md)
 
