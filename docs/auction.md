@@ -121,6 +121,8 @@ The devices submit bids after the market opens. When the market closes, devices 
 
 # Auction Rules
 
+In order for a database operation to be successfully completed, the following rules must be applied.
+
 ## Bid Rules
 
 1. Only an Agent shall be permitted to submit or update a Bid
@@ -171,6 +173,8 @@ The devices submit bids after the market opens. When the market closes, devices 
       1. The Penalty payment shall be distributed to the Dispatched devices in proportion to the surpluses received at the original Clearing Price, not counting the Device(s) paying the penalty.
 
 # Auction Data Tables
+
+The following data tables are used by the auction subsystem.
 
 ## Bids
 
@@ -264,6 +268,8 @@ Data validation rules shall be enforced when data is being added the database or
 4. The sum of all `cost` values in each settlement interval shall equal zero.
 
 # Auction API
+
+The auction subsystem implements the following API.
 
 ## `GET /auction/<bid_id>`
 
