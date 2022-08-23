@@ -172,6 +172,8 @@ The devices submit bids after the market opens. When the market closes, devices 
 
 ## Bids
 
+The `bids` table collects all the bid data for each auction.
+
 | Name | Type | Description
 | ---- | ---- | -----------
 | bid_id | text | The bid identifier
@@ -187,6 +189,8 @@ The devices submit bids after the market opens. When the market closes, devices 
 
 ## Agents
 
+The `agents` table collects all the agent data for each device.
+
 | Name | Type | Description
 | ---- | ---- | -----------
 | agent_id | text | The agent identifier
@@ -194,6 +198,8 @@ The devices submit bids after the market opens. When the market closes, devices 
 | valid_at | real | The timeat which this record goes into effect
 
 ## Dispatch
+
+The `dispatch` table collects all the market clearing results for each bid.
 
 | Name | Type | Description
 | ---- | ---- | -----------
@@ -204,6 +210,8 @@ The devices submit bids after the market opens. When the market closes, devices 
 | duration | real | The duration of the dispatch in seconds
 
 ## Ledger
+
+The `ledger` table collects all the market settlement data for each auction.
 
 | Name | Type | Description
 | ---- | ---- | -----------
@@ -251,6 +259,7 @@ Data validation rules shall be enforced when data is being added the database or
 1. The `bid_id` shall exist in the bids table.
 2. The `unit` shall be the bid unit divided by 1 hour.
 3. The `cost` shall equal the `meter` value multiplied by the dispatch price.
+4. The sum of all `cost` values in each settlement interval shall equal zero.
 
 # Auction API
 
