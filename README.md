@@ -1,3 +1,3 @@
-TESS Version 2 Design Documentation
+TESS Connected Communitiesw Design Documentation
 
 * [System overview](docs/README.md)
