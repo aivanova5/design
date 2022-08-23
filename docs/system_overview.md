@@ -13,25 +13,25 @@ flowchart TD
   gateway -- ? --> auth[Cognito]
   
   gateway -- ? --> s3[S3]
-    s3 --- www([Websites])
+    s3 ---> www([Websites])
   
   gateway -- ? --> ec2[EC2]
-    ec2 --- elb((ELB))
-    ec2 --- ebs([EBS])
-    ec2 --- dns((DNS))
-    ec2 --- route53((Route53))
-    ec2 --- vpc((VPC))
-    ec2 --- sg((SG))
+    ec2 ---> elb((ELB))
+    ec2 ---> ebs([EBS])
+    ec2 ---> dns((DNS))
+    ec2 ---> route53((Route53))
+    ec2 ---> vpc((VPC))
+    ec2 ---> sg((SG))
   
   gateway -- ? --> lambda[Lambda]
-    lambda --- sqs((SQS))
-    lambda --- sns((SNS))
+    lambda ---> sqs((SQS))
+    lambda ---> sns((SNS))
     lambda --> auction[Auction]:::active
     click auction "https://github.com/tess-v2/design/blob/master/docs/auction.md" _blank
     lambda --> device[Device]:::active
     click auction "https://github.com/tess-v2/design/blob/master/docs/device.md" _blank
   
-  gateway ---- amplify[Amplify]
+  gateway ----> amplify[Amplify]
   
   gateway -- ? --> other[Other services]
   
