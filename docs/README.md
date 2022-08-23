@@ -43,15 +43,22 @@ flowchart TD
     lambda --> auction[Auction]:::active
       click auction "https://github.com/postroad-energy/design/blob/main/docs/auction.md" _blank
       auction --API--> database  
-    lambda --> device[Device]:::active
-      click device "https://github.com/postroad-energy/design/blob/main/docs/device.md" _blank
-      device --API--> database[(Database)]:::active
+    lambda --> db_api[Database]:::active
+      click db_api "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
+      db_api --API--> database[(Database)]:::active
       click database "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
       
   gateway --> amplify[Amplify]
   
   gateway --> other[Other services]
   
+  database --> simulation[Simulation]:::active --> results[(Results)]:::active
+    click simulation "https://github.com/postroad-energy/design/blob/main/docs/simulation.md" _blank
+    click results "https://github.com/postroad-energy/design/blob/main/docs/results.md" _blank
+  
+  database --> analysis[Analysis]:::active --> results
+    click analysis "https://github.com/postroad-energy/design/blob/main/docs/analysis.md" _blank
+    
 ```
 
 # Information Flow
