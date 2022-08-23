@@ -72,13 +72,13 @@ sequenceDiagram
       Ledge-->>-Constraint: <cost>
    and
       Device 1->>+Ledger: PUT /settle/<bid_id>
-      Ledge-->>-Device: <cost>
+      Ledger-->>-Device: <cost>
    and
       Device N->>+Ledger: PUT /settle/<bid_id>
-      Ledge-->>-Device 1: <cost>
+      Ledger-->>-Device 1: <cost>
    end
    
-   Note over Ledge,Device N: Settlement ends
+   Note over Ledger,Device N: Settlement ends
 ```
 
 The devices submit bids after the market opens. When the market closes, devices request their dispatch. The first request received results in a market clearing operation to discover the price. All dispatch requests return the clearing price and the dispatch quantity for the device. Note that the marginal device will receive a quantity less than its bid. Dispatched units will receive a quantity equal to their bids. Devices that are not dispatched will receive a quantity zero.  If more than one device bid the clearing price, then the marginal unit is chosen based on the order in which the bids are received with earlier bids receiving high precedence in the dispatch order.
