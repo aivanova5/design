@@ -299,7 +299,7 @@ graph LR
   get_data --> code200([200 OK]):::success
 ```
 
-## `PUT /auction/<agent_id>`
+## `PUT /auction/<device_id>`
 ## `PUT /auction/<bid_id>`
 
 The auction bid `PUT` method allows the addition and modification of bids by device agents.
