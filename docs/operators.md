@@ -29,7 +29,7 @@ flowchart TD
   Main --Select--> Database --Select--> Main
   Main --Select--> Users --Select--> Main
   Main --Select--> Controllers --Select--> Main
-  Main --Select--> Monitors --Select--> Main
+  Main --Select--> Operators --Select--> Main
   Main --Select--> Billing --Select--> Main
 ```
 
@@ -49,14 +49,14 @@ classDiagram
     +button Database
     +button Users
     +button Controllers
-    +button Monitors
+    +button Operators
     +button Billing
     +SelectMain()
     +SelectAuction()
     +SelectDatabase()
     +SelectUsers()
     +SelectControllers()
-    +SelectMonitors()
+    +SelectOperators()
     +SelectBilling()
   }
   class Graph {
