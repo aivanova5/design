@@ -18,5 +18,14 @@
 
 ## Simulation Flow 
 
+```mermaid 
+flowchart LR 
 
+  classDef active stroke-width:4px;
+  
+  config--> loads --> network-->output
+  config --> controls --> network
+  controls --> loads
+  
 
+```
