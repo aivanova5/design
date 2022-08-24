@@ -21,7 +21,7 @@ section Day N-1
    
 section Day N
    Settlement 1-12 (closed): done, hr0, 00:00, 12:00
-   Settlement 13 (active): crit, hr13, 12:00, 13:00
+   Settlement 13 (open): crit, hr13, 12:00, 13:00
    Auction 1 (closed): done, auc1, 12:00, 12:15
    Auction 2 (dispatched): crit, auc2, after auc1, 12:30
    Auction 3 (active): active, auc3, after auc2, 12:45
