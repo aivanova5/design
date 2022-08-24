@@ -24,7 +24,7 @@ section Day N
    Settlement 13 (open): crit, hr13, 12:00, 13:00
    Auction 1 (closed): done, auc1, 12:00, 12:15
    Auction 2 (dispatched): crit, auc2, after auc1, 12:30
-   Auction 3 (active): active, auc3, after auc2, 12:45
+   Auction 3 (open): active, auc3, after auc2, 12:45
    Auction 4 (pending):   auc4, after auc3, 13:00
    Settlement 14-24 (pending):   hr14, 13:00, 24:00
 
