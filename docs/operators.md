@@ -59,7 +59,7 @@ classDiagram
     +SelectOperators()
     +SelectBilling()
   }
-  class Graph {
+  class MainGraph {
     +plot Image
     +button ZoomIn
     +button ZoomOut
