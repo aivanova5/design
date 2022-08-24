@@ -18,7 +18,7 @@ flowchart TD
       click billing_app "https://github.com/postroad-energy/design/blob/main/docs/billing.md" _blank
 
   operators([Operators]) --HTTPS--> operator_app[Operator App]:::active --REST--> gateway
-      click operator_app "https://github.com/postroad-energy/design/blob/main/docs/oeprators.md" _blank
+      click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
 
   experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> gateway
       click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
