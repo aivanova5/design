@@ -1,4 +1,4 @@
-The purpose of the monitor application is to provide the TESS system technical support staff the ability to monitor the status and repair the TESS system during operations.
+The purpose of the operators application is to provide the TESS system technical support staff the ability to monitor the status and repair the TESS system during operations.
 
 # User Page Flow
 
@@ -15,7 +15,7 @@ flowchart LR
   Warning/Login --Help--> Help
   Warning/Login --Password--> Password
   
-  Help --Send--> Warning/Login
+  Help --Send--> Reset --Accept--> Warning/Login
   
   Password --Send--> TwoFactor --Code--> Main
 ```
