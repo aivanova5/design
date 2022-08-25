@@ -1,31 +1,36 @@
 # Simulation Design 
 
+The design of the simulation is modular: options are decided by either including or dis-including optional files or by the contents of the files themselves. High level configuration file defines the utility name. 
+
 ## File List 
 
+Main: `main.sh`
+
+
 Required files
-* config.csv 
+* `config.csv` 
   - name of utility 
   - relevant settings pertained to utility
-* network (CYME)
+* `network`.xx (CYME)
   - convert CYME2GLM
   - associate groupids with SCADA objects 
-* loads.glm
+* `loads.glm`
   - AMI vs Realtime
-* market.glm 
+* `market.glm` 
   - Orderbook vs auction logic 
   - module market
-* output.glm
+* `output.glm`
   - default output: SCADA (SWING, cap banks, regulators)
   - correlated from group_id
   
 Optional files
-* analytics.glm
-* diagnostics.glm
+* `analytics.glm`
+* `diagnostics.glm`
   - billing.csv 
   - powerdump.csv
   - voltagedump.csv
   - currentdump.csv
-* billing.glm 
+* `billing.glm` 
 
 
 
