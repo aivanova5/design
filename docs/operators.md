@@ -1,4 +1,4 @@
-The purpose of the monitor application is to provide the TESS system technical support staff the ability to monitor the status and repair the TESS system during operations.
+The purpose of the operators application is to provide the TESS system technical support staff the ability to monitor the status and repair the TESS system during operations.
 
 # User Page Flow
 
@@ -15,7 +15,7 @@ flowchart LR
   Warning/Login --Help--> Help
   Warning/Login --Password--> Password
   
-  Help --Send--> Warning/Login
+  Help --Send--> Reset --Accept--> Warning/Login
   
   Password --Send--> TwoFactor --Code--> Main
 ```
@@ -29,7 +29,7 @@ flowchart TD
   Main --Select--> Database --Select--> Main
   Main --Select--> Users --Select--> Main
   Main --Select--> Controllers --Select--> Main
-  Main --Select--> Monitors --Select--> Main
+  Main --Select--> Operators --Select--> Main
   Main --Select--> Billing --Select--> Main
 ```
 
@@ -49,17 +49,17 @@ classDiagram
     +button Database
     +button Users
     +button Controllers
-    +button Monitors
+    +button Operators
     +button Billing
     +SelectMain()
     +SelectAuction()
     +SelectDatabase()
     +SelectUsers()
     +SelectControllers()
-    +SelectMonitors()
+    +SelectOperators()
     +SelectBilling()
   }
-  class Graph {
+  class MainGraph {
     +plot Image
     +button ZoomIn
     +button ZoomOut

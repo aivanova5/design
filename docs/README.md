@@ -17,8 +17,8 @@ flowchart TD
   billing([Billing User]) --HTTPS--> billing_app[Billing App]:::active --REST--> gateway
       click billing_app "https://github.com/postroad-energy/design/blob/main/docs/billing.md" _blank
 
-  monitors([Monitors]) --HTTPS--> monitor_app[Monitor App]:::active --REST--> gateway
-      click monitor_app "https://github.com/postroad-energy/design/blob/main/docs/monitors.md" _blank
+  operators([Operators]) --HTTPS--> operator_app[Operator App]:::active --REST--> gateway
+      click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
 
   experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> gateway
       click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
@@ -91,8 +91,8 @@ flowchart LR
   billing([Billing User]) --HTTPS--> billing_app[Billing App]:::active --REST--> database_api
       click billing_app "https://github.com/postroad-energy/design/blob/main/docs/billing.md" _blank
 
-  monitors([Monitors]) --HTTPS--> monitor_app[Monitor App]:::active --REST--> database_api
-      click monitor_app "https://github.com/postroad-energy/design/blob/main/docs/monitors.md" _blank
+  operators([Operators]) --HTTPS--> operator_app[Operator App]:::active --REST--> database_api
+      click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
 
   experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> database_api
       click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
@@ -105,7 +105,7 @@ flowchart LR
 * [Billing](billing.md)
 * [Users](users.md)
 * [Controllers](controllers.md)
-* [Monitors](monitors.md)
+* [Operators](operators.md)
 * [Experimenters](experimenters.md)
 
 ## APIs
