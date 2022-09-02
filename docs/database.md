@@ -1,24 +1,31 @@
 ```mermaid
 erDiagram
 
-  USER {
+  USERS {
     string user_id PK "index1a,index2b"
     real valid_at "index1b,index2c"
     string lastname "index2a"
     string firstname
-    string email "unique1"
-    integer phone "unique2"
+    string email
+    integer phone
+    unique u_users_email "email"
+    unique u_users_phone "phone"
+    index i_users_userid_validat "user_id,valid_at"
+    index i_users_lastname_userid_validat "lastname,userid,valid_at"
   }
-  USER ||--o{ AGENT : owns
+  USERS ||--o{ AGENTS : owns
 
-  AGENT {
-    string agent_id PK "index1a"
-    string device_id FK "index2a"
-    string user_id FK "index3a"
+  AGENTS {
+    string agent_id PK 
+    string device_id FK "devices.device_id"
+    string user_id FK "users.user_id"
     real valid_at "index1b,index2b,index3b"
+    index i_agents_agentid_validat "agent_id,valid_at"
+    index i_agents_deviceid_validat "device_id,valid_at"
+    index i_agents_userid_validat "user_id,valid_at"
   }
   
-  DEVICE {
+  DEVICES {
     string device_id PK
     real valid_at
     string device_type
@@ -32,19 +39,20 @@ erDiagram
     real minimum_ramp
     string ramp_unit
   }
-  AGENT ||--o{ DEVICE : controls
+  AGENTS ||--o{ DEVICES : controls
   
-  SETTING {
+  SETTINGS {
     string setting_id PK
     string device_id FK
     real valid_at
     string name
     string value
+    unique u_settings_deviceid_name_valueat "device_id,name,value_at"
   }
-  DEVICE ||--o{ SETTING : has_settings
+  DEVICES ||--o{ SETTINGS : has_settings
   
   
-  BID {
+  BIDS {
     string bid_id PK
     integer market_id
     string device_id FK
@@ -56,9 +64,9 @@ erDiagram
     string constraint_id
     integer flexibility
   }
-  AGENT ||--o{ BID : submits
+  AGENTS ||--o{ BIDS : submits
   
-  DISPATCH {
+  DISPATCHES {
     string bid_id PK
     integer market_id
     real quantity
@@ -66,14 +74,14 @@ erDiagram
     real price
     real duration
   }
-  BID ||--o| DISPATCH : dispatches
+  BIDS ||--o| DISPATCHES : dispatches
   
-  LEDGER {
+  LEDGERS {
     string bid_id PK
     real quantity
     string unit
     real cost
   }
-  DISPATCH ||--o| LEDGER : settles
+  DISPATCHES ||--o| LEDGERS : settles
   
 ```
