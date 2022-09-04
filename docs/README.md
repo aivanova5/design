@@ -4,7 +4,7 @@ flowchart TD
   
   classDef active stroke-width:4px;
 
-  devices([Devices]) --OpenADR--> agents  
+  devices([Devices]) --OpenADR/CTA2045--> agents  
   agents[Agents]:::active --REST--> gateway[API Gateway]
       click agents "https://github.com/postroad-energy/design/blob/main/docs/agents.md" _blank
 
@@ -23,6 +23,12 @@ flowchart TD
   experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> gateway
       click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
 
+  analysis([Analysts]) --HTTPS--> analysis_app[Analysis App]:::active --REST--> gateway
+      click analysis_app "https://github.com/postroad-energy/design/blob/main/docs/analysis.md" _blank
+  
+  developers([Developers]) --HTTPS--> simulation[Simulation]:::active --REST--> gateway
+      click simulation "https://github.com/postroad-energy/design/blob/main/docs/simulation.md" _blank
+  
   gateway --> auth[Cognito]
   
   gateway --> s3[S3]
@@ -40,25 +46,17 @@ flowchart TD
   gateway --> lambda[Lambda]
     lambda --> sqs((SQS))
     lambda --> sns((SNS))
-    lambda --> auction[Auction]:::active
+    lambda --> auction[Auction]:::active --REST--> db_api  
       click auction "https://github.com/postroad-energy/design/blob/main/docs/auction.md" _blank
-      auction --API--> database  
-    lambda --> db_api[Database]:::active
+    lambda --> orderbook[Orderbook]:::active --REST--> db_api  
+      click orderbook "https://github.com/postroad-energy/design/blob/main/docs/orderbook.md" _blank
+    lambda --REST--> db_api[Database API]:::active --SQL--> database[(Database)]:::active
       click db_api "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
-      db_api --API--> database[(Database)]:::active
       click database "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
       
   gateway --> amplify[Amplify]
   
   gateway --> other[Other services]
-  
-  database --> simulation[Simulation]:::active --> results[(Results)]:::active
-    click simulation "https://github.com/postroad-energy/design/blob/main/docs/simulation.md" _blank
-    click results "https://github.com/postroad-energy/design/blob/main/docs/results.md" _blank
-  
-  database --> analysis[Analysis]:::active --> results
-    click analysis "https://github.com/postroad-energy/design/blob/main/docs/analysis.md" _blank
-    
 ```
 
 # Information Flow
