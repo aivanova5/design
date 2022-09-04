@@ -8,14 +8,14 @@ flowchart TD
   agents[Agents]:::active --REST--> gateway[API Gateway]
       click agents "https://github.com/postroad-energy/design/blob/main/docs/agents.md" _blank
 
-  users([Users]) --HTTPS--> user_app[User App]:::active --REST--> gateway
-      click user_app "https://github.com/postroad-energy/design/blob/main/docs/users.md" _blank
+  participant([Participants]) --HTTPS--> participant_app[Participant App]:::active --REST--> gateway
+      click participant_app "https://github.com/postroad-energy/design/blob/main/docs/participants.md" _blank
 
   controllers([Controllers]) --HTTPS--> controller_app[Controller App]:::active --REST--> gateway
       click controller_app "https://github.com/postroad-energy/design/blob/main/docs/controllers.md" _blank
 
-  billing([Billing User]) --HTTPS--> billing_app[Billing App]:::active --REST--> gateway
-      click billing_app "https://github.com/postroad-energy/design/blob/main/docs/billing.md" _blank
+  settlement([Settlement]) --HTTPS--> settlement_app[Settlement App]:::active --REST--> gateway
+      click billing_app "https://github.com/postroad-energy/design/blob/main/docs/settlement.md" _blank
 
   operators([Operators]) --HTTPS--> operator_app[Operator App]:::active --REST--> gateway
       click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
@@ -76,20 +76,20 @@ flowchart LR
   agent --"CTA2045"--> device
     click device "https://github.com/postroad-energy/design/blob/main/docs/device.md" _blank
   
-  user --Device Interface--> device
+  participant --Device Interface--> device
   
-  auction --"SQL"--> database[(Database)]:::active
+  auction --"REST"--> database_api
     click database "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
   
-  user([User]) --HTTPS--> user_app[User App]:::active --REST--> database_api[db_api]:::active --SQL--> database
-    click user_app "https://github.com/tess-cc/design/blob/main/docs/users.md" _blank
+  participant([Participant]) --HTTPS--> participant_app[Participant App]:::active --REST--> database_api[Database API]:::active --SQL--> database
+    click participant_app "https://github.com/tess-cc/design/blob/main/docs/participants.md" _blank
     click db_api "https://github.co/postroad-energy/design/blob/main/docs/database.md" _blank
 
   controller([Controller]) --HTTPS--> controller_app[Controller App]:::active --REST--> database_api
       click controller_app "https://github.com/postroad-energy/design/blob/main/docs/controller.md" _blank
 
-  billing([Billing User]) --HTTPS--> billing_app[Billing App]:::active --REST--> database_api
-      click billing_app "https://github.com/postroad-energy/design/blob/main/docs/billing.md" _blank
+  settlement([Settlement]) --HTTPS--> settlement_app[Settlement App]:::active --REST--> database_api
+      click settlement_app "https://github.com/postroad-energy/design/blob/main/docs/settlement.md" _blank
 
   operators([Operators]) --HTTPS--> operator_app[Operator App]:::active --REST--> database_api
       click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
@@ -97,16 +97,19 @@ flowchart LR
   experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> database_api
       click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
 
+  developer([Developers]) --GridLAB-D--> simulation[Simulation]:::active --GLM--> database_api
+      click simulation "https://github.com/postroad-energy/design/blob/main/docs/simulation.md" _blank
 ```
 
 # Component Design 
 
 ## Applications
-* [Billing](billing.md)
-* [Users](users.md)
-* [Controllers](controllers.md)
 * [Operators](operators.md)
+* [Controllers](controllers.md)
+* [Settlement](settlement.md)
+* [Participants](participants.md)
 * [Experimenters](experimenters.md)
+* [Simulation](simulation.md)
 
 ## APIs
 * [Agents](agents.md)
