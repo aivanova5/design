@@ -107,16 +107,24 @@ flowchart LR
 * [Settlement](settlement.md)
 * [Participants](participants.md)
 * [Experimenters](experimenters.md)
-* [Simulation](simulation.md)
+* [Developers](simulation.md)
+* [Analysts](analysis.md)
 
 ## APIs
 * [Agents](agents.md)
 * [Auction](auction.md)
+* [Orderbook](orderbook.md)
 * [Database](database.md)
 * [Device](device.md)
+* [Simulation](simulation.md)
 
 ## Data systems
 * [Database](database.md)
+* [Weather](weather.md)
+* [SCADA](scada.md)
+* [AMI](ami.md)
+* [Network](network.md)
+* [Assets](assets.md)
 
 # Reference Documents
 
