@@ -4,36 +4,76 @@ flowchart TD
   
   classDef active stroke-width:4px;
 
-  devices([Devices]) --OpenADR/CTA2045--> agents  
-  agents[Agents]:::active --REST--> gateway[API Gateway]
-      click agents "https://github.com/postroad-energy/design/blob/main/docs/agents.md" _blank
+  devices[Devices] --OpenADR/CTA2045--> agents[Agents]:::active --REST--> gateway[API Gateway]
+    click agents "https://github.com/postroad-energy/design/blob/main/docs/agents.md" _blank
 
+  datafeeds[Data Feeds] --HTTPS--> dataloader[Data Loader]:::active --REST--> gateway
+    click dataloader "https://github.com/postroad-energy/design/blob/main/docs/datafeeds.md" _blank
+  
   participant([Participants]) --HTTPS--> participant_app[Participant App]:::active --REST--> gateway
-      click participant_app "https://github.com/postroad-energy/design/blob/main/docs/participants.md" _blank
+    click participant_app "https://github.com/postroad-energy/design/blob/main/docs/participants.md" _blank
 
   controllers([Controllers]) --HTTPS--> controller_app[Controller App]:::active --REST--> gateway
-      click controller_app "https://github.com/postroad-energy/design/blob/main/docs/controllers.md" _blank
+    click controller_app "https://github.com/postroad-energy/design/blob/main/docs/controllers.md" _blank
 
   settlement([Settlement]) --HTTPS--> settlement_app[Settlement App]:::active --REST--> gateway
-      click billing_app "https://github.com/postroad-energy/design/blob/main/docs/settlement.md" _blank
+    click billing_app "https://github.com/postroad-energy/design/blob/main/docs/settlement.md" _blank
 
   operators([Operators]) --HTTPS--> operator_app[Operator App]:::active --REST--> gateway
-      click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
+    click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
 
   experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> gateway
-      click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
+    click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
 
   analysis([Analysts]) --HTTPS--> analysis_app[Analysis App]:::active --REST--> gateway
-      click analysis_app "https://github.com/postroad-energy/design/blob/main/docs/analysis.md" _blank
+    click analysis_app "https://github.com/postroad-energy/design/blob/main/docs/analysis.md" _blank
   
   developers([Developers]) --HTTPS--> simulation[Simulation]:::active --REST--> gateway
-      click simulation "https://github.com/postroad-energy/design/blob/main/docs/simulation.md" _blank
+    click simulation "https://github.com/postroad-energy/design/blob/main/docs/simulation.md" _blank
   
-  gateway --> auth[Cognito]
+  gateway --> lambda[Lambda]
+  
+    lambda --> sqs((SQS))
+    
+    lambda --> sns((SNS))
+
+    lambda --> auction[Auction]:::active --REST--> db_api  
+      click auction "https://github.com/postroad-energy/design/blob/main/docs/auction.md" _blank
+      
+    lambda --> orderbook[Orderbook]:::active --REST--> db_api  
+      click orderbook "https://github.com/postroad-energy/design/blob/main/docs/orderbook.md" _blank
+      
+    lambda --> weather[Weather]:::active --REST--> db_api  
+      click weather "https://github.com/postroad-energy/design/blob/main/docs/weather.md" _blank
+    
+    lambda --> market[Market]:::active --REST--> db_api  
+      click market "https://github.com/postroad-energy/design/blob/main/docs/market.md" _blank
+    
+    lambda --> scada[SCADA]:::active --REST--> db_api  
+      click scada "https://github.com/postroad-energy/design/blob/main/docs/scada.md" _blank
+    
+    lambda --> network[Network]:::active --REST--> db_api  
+      click network "https://github.com/postroad-energy/design/blob/main/docs/network.md" _blank
+    
+    lambda --> assets[Assets]:::active --REST--> db_api  
+      click assets "https://github.com/postroad-energy/design/blob/main/docs/assets.md" _blank
+    
+    lambda --> ami[AMI]:::active --REST--> db_api  
+      click ami "https://github.com/postroad-energy/design/blob/main/docs/ami.md" _blank
+    
+    lambda --REST--> db_api[Database API]:::active --SQL--> database[(Database)]:::active
+      click db_api "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
+      click database "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
+
+  gateway --> other[Other services]
+
+  gateway --> amplify[Amplify]
   
   gateway --> s3[S3]
     s3 --> websites([Websites]):::active
       click websites "https://github.com/postroad-energy/design/blob/main/docs/websites.md" _blank
+  
+  gateway --> auth[Cognito]
   
   gateway --> ec2[EC2]
     ec2 --> elb((ELB))
@@ -42,21 +82,6 @@ flowchart TD
     ec2 --> route53((Route53))
     ec2 --> vpc((VPC))
     ec2 --> sg((SG))
-  
-  gateway --> lambda[Lambda]
-    lambda --> sqs((SQS))
-    lambda --> sns((SNS))
-    lambda --> auction[Auction]:::active --REST--> db_api  
-      click auction "https://github.com/postroad-energy/design/blob/main/docs/auction.md" _blank
-    lambda --> orderbook[Orderbook]:::active --REST--> db_api  
-      click orderbook "https://github.com/postroad-energy/design/blob/main/docs/orderbook.md" _blank
-    lambda --REST--> db_api[Database API]:::active --SQL--> database[(Database)]:::active
-      click db_api "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
-      click database "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
-      
-  gateway --> amplify[Amplify]
-  
-  gateway --> other[Other services]
 ```
 
 # Information Flow
