@@ -91,22 +91,26 @@ flowchart LR
 
   classDef active stroke-width:4px;
 
-  agent[Agent]:::active --"REST"--> auction[Auction]:::active
-    click agent "https://github.co/postroad-energy/design/blob/main/docs/agent.md" _blank
+  datafeeds[Data Feeds]:::active --REST--> dataloader[Data Loader]:::active --> database_api
+    click datafeeds "https://github.com/postroad-energy/design/blob/main/docs/datafeeds.md" _blank
+    click dataloader "https://github.com/postroad-energy/design/blob/main/docs/dataloader.md" _blank
+    
+  agent[Agent]:::active --REST--> auction[Auction]:::active
+    click agent "https://github.com/postroad-energy/design/blob/main/docs/agent.md" _blank
     click auction "https://github.com/postroad-energy/design/blob/main/docs/auction.md" _blank
     
-  agent --"OpenADR"--> device[Device]:::active
-  agent --"CTA2045"--> device
+  agent --OpenADR--> device[Device]:::active
+  agent --CTA2045--> device
     click device "https://github.com/postroad-energy/design/blob/main/docs/device.md" _blank
   
   participant --Device Interface--> device
   
-  auction --"REST"--> database_api
-    click database "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
+  auction --REST--> database_api
+    click database_api "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
   
-  participant([Participant]) --HTTPS--> participant_app[Participant App]:::active --REST--> database_api[Database API]:::active --SQL--> database
+  participant([Participant]) --HTTPS--> participant_app[Participant App]:::active --REST--> database_api[Database API]:::active --SQL--> database[Database]:::active
     click participant_app "https://github.com/tess-cc/design/blob/main/docs/participants.md" _blank
-    click db_api "https://github.co/postroad-energy/design/blob/main/docs/database.md" _blank
+    click database "https://github.co/postroad-energy/design/blob/main/docs/database.md" _blank
 
   controller([Controller]) --HTTPS--> controller_app[Controller App]:::active --REST--> database_api
       click controller_app "https://github.com/postroad-energy/design/blob/main/docs/controller.md" _blank
@@ -120,6 +124,9 @@ flowchart LR
   experiment([Experimenters]) --HTTPS--> experiment_app[Experiment App]:::active --REST--> database_api
       click experiment_app "https://github.com/postroad-energy/design/blob/main/docs/experimenters.md" _blank
 
+  analyst([Analysts]) --HTTPS--> analysis_app[Analysis App]:::active --REST--> database_api
+    click analysis_app "https://github.com/postroad-energy/design/block/main/docs/analysis.md" _blank
+    
   developer([Developers]) --GridLAB-D--> simulation[Simulation]:::active --GLM--> database_api
       click simulation "https://github.com/postroad-energy/design/blob/main/docs/simulation.md" _blank
 ```
