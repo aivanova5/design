@@ -110,7 +110,7 @@ flowchart LR
   
   participant([Participant]) --HTTPS--> participant_app[Participant App]:::active --REST--> database_api[Database API]:::active --SQL--> database[Database]:::active
     click participant_app "https://github.com/tess-cc/design/blob/main/docs/participants.md" _blank
-    click database "https://github.co/postroad-energy/design/blob/main/docs/database.md" _blank
+    click database "https://github.com/postroad-energy/design/blob/main/docs/database.md" _blank
 
   controller([Controller]) --HTTPS--> controller_app[Controller App]:::active --REST--> database_api
       click controller_app "https://github.com/postroad-energy/design/blob/main/docs/controller.md" _blank
