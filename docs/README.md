@@ -76,11 +76,8 @@ flowchart TD
   gateway --> auth[Cognito]
   
   gateway --> ec2[EC2]
-    ec2 --> elb((ELB))
     ec2 --> ebs([EBS])
     ec2 --> dns((DNS))
-    ec2 --> route53((Route53))
-    ec2 --> vpc((VPC))
     ec2 --> sg((SG))
 ```
 
