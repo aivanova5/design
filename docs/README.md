@@ -33,9 +33,9 @@ flowchart TD
   
   gateway --> lambda[Lambda]
   
-    lambda --> sqs((SQS))
-    
-    lambda --> sns((SNS))
+  gateway --> sqs((SQS)) --> lambda2[Lambda]
+
+  gateway --> sns((SNS)) --> lambda3[Lambda]
 
     lambda --> auction[Auction]:::active --REST--> db_api  
       click auction "https://github.com/postroad-energy/design/blob/main/docs/auction.md" _blank
