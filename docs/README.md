@@ -17,7 +17,7 @@ flowchart TD
     click controller_app "https://github.com/postroad-energy/design/blob/main/docs/controllers.md" _blank
 
   settlement([Settlement]) --HTTPS--> settlement_app[Settlement App]:::active --REST--> gateway
-    click billing_app "https://github.com/postroad-energy/design/blob/main/docs/settlement.md" _blank
+    click settlement_app "https://github.com/postroad-energy/design/blob/main/docs/settlement.md" _blank
 
   operators([Operators]) --HTTPS--> operator_app[Operator App]:::active --REST--> gateway
     click operator_app "https://github.com/postroad-energy/design/blob/main/docs/operators.md" _blank
