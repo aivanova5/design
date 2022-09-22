@@ -73,7 +73,8 @@ flowchart TD
     s3 --> websites([Websites]):::active
       click websites "https://github.com/postroad-energy/design/blob/main/docs/websites.md" _blank
   
-  gateway --> auth[Cognito]
+  gateway --> auth[Cognito]:::active
+    click auth "https://github.com/postroad-energy/design/blob/main/docs/authentication.md" _blank
   
   gateway --> ec2[EC2]
     ec2 --> ebs([EBS])
@@ -129,6 +130,8 @@ flowchart LR
 ```
 
 # Component Design 
+
+* [Authentication](authentication.md)
 
 ## Applications
 * [Operators](operators.md)
