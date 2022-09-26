@@ -150,7 +150,7 @@ from {table};
 
 Returns: (int)
 
-## `GET /settlement_sum`
+## `GET /settlements_total`
 
 SQL:
 ~~~
@@ -160,13 +160,24 @@ from settlements;
 
 Returns: (float)
 
-## `GET /settlement_sum`
+## `GET /settlements`
 
 SQL:
 ~~~
 select device_id, sum(cost) 
 from settlements join orders on settlements.order_id = orders.order_id
 group by device_id;
+~~~
+
+Returns: list of select row values
+
+## `GET /settlements/<device_id>`
+
+SQL:
+~~~
+select sum(cost) 
+from settlements join orders on settlements.order_id = orders.order_id
+where by device_id = {device_id};
 ~~~
 
 Returns: list of select row values
