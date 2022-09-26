@@ -1,5 +1,7 @@
 # Database API
 
+This API specification support the requirements for the simulation. See https://github.com/postroad-energy/simulation/blob/main/gridlabd/database.py for details.
+
 ## `PUT /settlements/<order_id>?cost=<cost>`
 
 SQL:
