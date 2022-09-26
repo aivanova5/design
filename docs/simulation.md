@@ -160,3 +160,14 @@ from settlements;
 
 Returns: (float)
 
+## `GET /settlement_sum`
+
+SQL:
+~~~
+select device_id, sum(cost) 
+from settlements join orders on settlements.order_id = orders.order_id
+group by device_id;
+~~~
+
+Returns: list of select row values
+
