@@ -93,12 +93,12 @@ flowchart LR
     click datafeeds "https://github.com/postroad-energy/design/blob/main/docs/datafeeds.md" _blank
     click dataloader "https://github.com/postroad-energy/design/blob/main/docs/dataloader.md" _blank
     
-  agent[Agent]:::active --REST--> auction[Auction]:::active
-    click agent "https://github.com/postroad-energy/design/blob/main/docs/agent.md" _blank
+  agents[Agents]:::active --REST--> auction[Auction]:::active
+    click agents "https://github.com/postroad-energy/design/blob/main/docs/agents.md" _blank
     click auction "https://github.com/postroad-energy/design/blob/main/docs/auction.md" _blank
     
-  agent --OpenADR--> device[Device]:::active
-  agent --CTA2045--> device
+  agents --OpenADR--> device[Device]:::active
+  agents --CTA2045--> device
     click device "https://github.com/postroad-energy/design/blob/main/docs/device.md" _blank
   
   participant --Device Interface--> device
